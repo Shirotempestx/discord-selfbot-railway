@@ -106,7 +106,7 @@ class DiscordSelfBot:
     async def send_message(self, channel_id: str, content: str):
         """Send a message with random delay and rate-limit handling"""
         try:
-            delay = random.uniform(1.0, 3.0)
+            delay = random.uniform(1.0, 2.0)
             await asyncio.sleep(delay)
             
             payload = {"content": content}
@@ -209,14 +209,14 @@ class DiscordSelfBot:
                 logger.error("Failed to send '$tu' command")
                 return
             
-            await asyncio.sleep(random.uniform(3, 7))
+            await asyncio.sleep(random.uniform(1.2, 3))
             
             recent_messages = await self.get_recent_messages(CHANNEL_ID, 10)
             
             moday_response = None
             for message in recent_messages:
                 author = message.get("author", {})
-                if author.get("id") == MODAY_UID or "MoDay" in author.get("username", ""):
+                if author.get("id") == MODAY_UID or "Mudae#0807" in author.get("username", ""):
                     content = message.get("content", "")
                     lower_content = content.lower()
                     if any(keyword in lower_content for keyword in ["claim", "you have", "you may", "can't react", "power", "stock"]):
@@ -236,23 +236,23 @@ class DiscordSelfBot:
                 logger.info(f"Rolls left: {rolls_left}")
             
             # Decide which command to send
-            lower_moday = moday_response.lower()
-            if any(keyword in lower_moday for keyword in ["can't claim", "wait"]):
-                logger.info("Cannot claim – sending '$ql wl'")
-                await self.send_message(CHANNEL_ID, "$ql wl")
-            else:
-                logger.info("Can claim – sending '$ql wl2'")
-                await self.send_message(CHANNEL_ID, "$ql wl2")
+            # lower_moday = moday_response.lower()
+            # if any(keyword in lower_moday for keyword in ["can't claim", "wait"]):
+            #     logger.info("Cannot claim – sending '$ql wl'")
+            #     await self.send_message(CHANNEL_ID, "$ql wl")
+            # else:
+            #     logger.info("Can claim – sending '$ql wl2'")
+            #     await self.send_message(CHANNEL_ID, "$ql wl2")
             
-            await asyncio.sleep(random.uniform(1, 3))
-            await self.send_message(CHANNEL_ID, "y")
+            # await asyncio.sleep(random.uniform(1, 3))
+            # await self.send_message(CHANNEL_ID, "y")
             
             # Auto-roll commands if rolls remain
             if rolls_left > 0:
                 logger.info(f"Sending {rolls_left} '$wa' commands with random delays (2-3 seconds)")
                 for i in range(rolls_left):
                     await self.send_message(CHANNEL_ID, "$wa")
-                    wait_time = random.uniform(2, 3)
+                    wait_time = random.uniform(1.15, 2.02)
                     await asyncio.sleep(wait_time)
             
         except Exception as e:
@@ -331,7 +331,7 @@ class DiscordSelfBot:
                 logger.info("Running scheduled claim check...")
                 await self.check_claim_and_execute()
                 
-                next_check = 3600 + random.uniform(-300, 300)
+                next_check = 3600 + random.uniform(-100, 100)
                 logger.info(f"Next claim check in {next_check/60:.1f} minutes")
                 await asyncio.sleep(next_check)
                 
