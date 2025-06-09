@@ -182,16 +182,22 @@ class DiscordSelfBot:
                 return
 
             lower = moday_msg.lower()
-            # 3) Re-send $ql wl1 or $ql wl2 based on response
+            # 3) Resend $ql wl1 or $ql wl2 based on response, then send "y"
             if "you can't claim" in lower:
                 logger.info("Detected no-claim → sending '$ql wl1'")
                 await self.send_message(CHANNEL_ID, "$ql wl1")
-            elif "you can claim" in lower:
+                await asyncio.sleep(random.uniform(0.8, 1.5))
+                logger.info("Confirming with 'y'")
+                await self.send_message(CHANNEL_ID, "y")
+
+            else:
                 logger.info("Detected can-claim → sending '$ql wl2'")
                 await self.send_message(CHANNEL_ID, "$ql wl2")
-            else:
-                logger.info("Neither 'you can' nor 'you can't' found in response.")
+                await asyncio.sleep(random.uniform(0.8, 1.5))
+                logger.info("Confirming with 'y'")
+                await self.send_message(CHANNEL_ID, "y")
 
+            
             # 4) Auto-roll remaining rolls
             rolls_left = 0
             m = re.search(r"You have \*\*(\d+)\*\* rolls left", moday_msg)
@@ -205,6 +211,8 @@ class DiscordSelfBot:
 
         except Exception as e:
             logger.error(f"Error during claim check: {e}")
+
+        
 
     async def message_monitor_loop(self):
         """Monitor incoming messages to look for loot and characters"""
