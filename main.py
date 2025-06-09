@@ -285,7 +285,7 @@ class DiscordSelfBot:
                 logger.info("Running scheduled claim check...")
                 await self.check_claim_and_execute()
 
-                next_check = 3600 + random.uniform(-100, 100)
+                next_check = 3600 + random.uniform(-150, 50)
                 logger.info(f"Next claim check in {next_check/60:.1f} minutes")
                 await asyncio.sleep(next_check)
 
